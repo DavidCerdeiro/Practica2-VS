@@ -91,9 +91,9 @@ spec:
     app: drupal
   ports:
   - protocol: TCP
-    port: 80        # Puerto expuesto dentro del clúster
-    targetPort: 80  # Puerto al que se redirige dentro de los pods de Drupal
-    nodePort: 30080 # Puerto que puedes usar para acceder desde fuera del clúster
+    port: 80       
+    targetPort: 80  
+    nodePort: 30080 
   type: NodePort
 ```
 Mediante este fichero describimos el servicio de Drupal necesario, volvemos a diseccionar, primera sección:
@@ -144,7 +144,7 @@ spec:
       - name: drupal
         image: drupal:latest
         ports:
-        - containerPort: 80  # Corregido para especificar el puerto del contenedor
+        - containerPort: 80
 ```
 Mediante este fichero describimos el despliegue del servicio Drupal anteriormente definido, volvemos a diseccionar, primera sección:
 ```yaml
@@ -171,7 +171,7 @@ spec:
       - name: drupal
         image: drupal:latest
         ports:
-        - containerPort: 80  # Corregido para especificar el puerto del contenedor
+        - containerPort: 80
 ```
 Primeramente indicamos el número de replicas que vamos a tener del servicio, después mediante la sección **"selector"** definimos los pods que debe gestionar, que serán aquellos que la etiqueta **"app"** sean de valor **"drupal"**. Mediante **"template"** indicamos el formato de los pods que el Deployment deben crear, que serán del formato anteriormente indicado, es decir, con etiqueta **"app"** de valor **"drupal"** y por último en **"containers"** describimos los contenedores que deben ejecutarse en los pods. Estos contenedores tendrán el nombre de drupal, usarán la imagen indicada y el puerto al que se expone será el 80.
 ## Archivos Persistencia
