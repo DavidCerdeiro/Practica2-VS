@@ -49,7 +49,7 @@ spec:
 
 ### Archivos Aplicado de Persistencia
 
-##### Drupal-persistent-volume
+##### Drupal-pvc
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim    # Servicio de reclamo de almacenamiento persistente.
@@ -63,7 +63,7 @@ spec:
       storage: 1Gi             # Solicita un gigabyte de almacenamiento.
 ```
 
-##### mysql-persistent-volume
+##### Mysql-pvc
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim    # Servicio de reclamo de almacenamiento persistente.
