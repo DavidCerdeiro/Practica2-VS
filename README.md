@@ -4,34 +4,10 @@
 
 ***Raul Ariza López***
 ### Archivos config
-Se nos solicita crear un fichero docker-compose.yaml con los servicios de Drupal y MySQL, el fichero debe ser el siguiente:
+Se nos solicita tener patatas cocidas:
 
 ```yaml
-version: '3'
-services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql_docker
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=practica1
-      - MYSQL_USER=drupal
-      - MYSQL_PASSWORD=drupal
-    volumes:
-      - volumenDocker:/var/lib/mysql
-  drupal:
-    image: drupal:latest
-    container_name: drupal_docker
-    ports:
-      - "81:80"
-    volumes:
-      - volumenDocker:/var/www/html
-volumes:
-  volumenDocker:
-```
-Vamos a explicar este fichero por partes, primero mediante esta línea:
-```yaml
-version: '3'
+Escribe aqui patata
 ```
 
 ### Archivo service
@@ -113,21 +89,21 @@ spec:
 # you're doing.
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
-  config.vm.network "forwarded_port", guest: 30080, host: 8085          # El puerto 30080 de la máquina de vagrant será el puerto 8085 del sistema host
-  config.vm.synced_folder "C:\\Users\\raule\\Desktop\\EntregableVS","/home/vagrant/config"    # Establece un directorio compartido entre host y máquina vagrant
+  config.vm.network "forwarded_port", guest: 30080, host: 8085          # El puerto 30080 de la máquina de vagrant será el puerto 8085 del sistema host.
+  config.vm.synced_folder "C:\\Users\\raule\\Desktop\\EntregableVS","/home/vagrant/config"    # Establece un directorio compartido entre host y máquina vagrant.
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"                                                  # Cantidad de memoria asignada a la m
+    vb.memory = "2048"                                                  # Cantidad de memoria asignada a la máquina vagrant.
   end
 
-  config.vm.provision "shell", inline: <<-SHELL                         # Instalación de Docker
-    sudo apt-get update
+  config.vm.provision "shell", inline: <<-SHELL                                              # Comandos que se harán en consola al iniciarse.
+    sudo apt-get update                                                                      # Instalación de Docker.
     sudo apt-get install -y docker.io
     sudo usermod -aG docker vagrant
     newgrp docker
     sudo apt-get install -y kubectl
 
 
-    sudo wget -O /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64    # Instalación de Kind
+    sudo wget -O /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64    # Instalación de Kind.
     sudo chmod +x /usr/local/bin/kind
   SHELL
 end
