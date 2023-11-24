@@ -177,44 +177,59 @@ Primeramente indicamos el número de replicas que vamos a tener del servicio, de
 ## Archivos Persistencia
 
 ### Drupal-persistent-volume
+En esta primera parte establecemos el tipo de servicio a utilizar con kind, que será un servicio de almacenamiento persistente, y el nombre de dicho almacenamiento.
 ```yaml
 apiVersion: v1
-kind: PersistentVolume    # Servicio de almacenamiento persistente.
+kind: PersistentVolume 
 metadata:
-  name: drupal-pv         # Nombre.
+  name: drupal-pv        
+```
+
+En la segunda parte establecemos la capacidad de dicho almacenamiento, su ruta, y el tipo de acceso, que será ReadWriteOnce, que significa lectura y escritura desde un sólo nodo.
+```yaml
 spec:
   capacity:
-    storage: 1Gi          # Capacidad de 1 gigabye de almacenamiento.
+    storage: 1Gi          # Capacidad de almacenamiento.
   accessModes:
-    - ReadWriteOnce       # Se puede acceder mediante escritura y lectura pero solo puede acceder un nodo.
+    - ReadWriteOnce       # Tipo de acceso
   hostPath:
-    path: "/data/drupal"  # Ruta donde estará el almacenamiento.
+    path: "/data/drupal"  # Ruta.
 ```
 
 ### Mysql-persistent-volume
+En esta primera parte establecemos el tipo de servicio a utilizar con kind, que será un servicio de almacenamiento persistente, y el nombre de dicho almacenamiento.
 ```yaml
 apiVersion: v1
-kind: PersistentVolume    # Servicio de almacenamiento persistente.
+kind: PersistentVolume 
 metadata:
-  name: mysql-pv          # Nombre.
+  name: mysql-pv         
+```
+
+En la segunda parte establecemos la capacidad de dicho almacenamiento, su ruta, y el tipo de acceso, que será ReadWriteOnce, que significa lectura y escritura desde un sólo nodo.
+```yaml
 spec:
   capacity:
-    storage: 1Gi          # Capacidad de 1 gigabye de almacenamiento.
+    storage: 1Gi          # Capacidad de almacenamiento
   accessModes:
-    - ReadWriteOnce       # Se puede acceder mediante escritura y lectura pero solo puede acceder un nodo.
+    - ReadWriteOnce       # Tipo de acceso
   hostPath:
-    path: "/data/mysql"   # Ruta donde estará el almacenamiento.
+    path: "/data/mysql"   # Ruta.
 ```
 
 
 ## Archivos Aplicado de Persistencia
 
 ### Drupal-pvc
+En esta primera parte establecemos el tipo de servicio a utilizar con kind, que será un servicio de reclamo de un almacenamiento persistente, y el nombre de este servicio.
 ```yaml
 apiVersion: v1
-kind: PersistentVolumeClaim    # Servicio de reclamo de almacenamiento persistente.
+kind: PersistentVolumeClaim   
 metadata:
-  name: drupal-pvc             # Nombre.
+  name: drupal-pvc             
+```
+
+En la segunda parte establecemos la capacidad de dicho solicitaremos, y el tipo de acceso, que será ReadWriteOnce, que significa lectura y escritura desde un sólo nodo.
+```yaml
 spec:
   accessModes:
     - ReadWriteOnce
@@ -224,11 +239,16 @@ spec:
 ```
 
 ### Mysql-pvc
+En esta primera parte establecemos el tipo de servicio a utilizar con kind, que será un servicio de reclamo de un almacenamiento persistente, y el nombre de este servicio.
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim    # Servicio de reclamo de almacenamiento persistente.
 metadata:
   name: mysql-pvc              # Nombre.
+```
+
+En la segunda parte establecemos la capacidad de dicho solicitaremos, y el tipo de acceso, que será ReadWriteOnce, que significa lectura y escritura desde un sólo nodo.
+```yaml
 spec:
   accessModes:
     - ReadWriteOnce
@@ -238,7 +258,8 @@ spec:
 ```
 
 ## Vagrantfile
-
+El vagrantfile podemos dividirlo en tres partes:
+Esta primera parte contiene lo mismo que el archivo vagrantfile creado por defecto, no hay nignuna modificación.
 ```ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
@@ -249,12 +270,20 @@ spec:
 # you're doing.
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
-  config.vm.network "forwarded_port", guest: 30080, host: 8085          # El puerto 30080 de la máquina de vagrant será el puerto 8085 del sistema host.
-  config.vm.synced_folder "C:\\Users\\raule\\Desktop\\EntregableVS","/home/vagrant/config"    # Establece un directorio compartido entre host y máquina vagrant.
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"                                                  # Cantidad de memoria asignada a la máquina vagrant.
-  end
+```
 
+Esta segunda parte en la que establecemos los puertos, 8085 en nuestro sistema será el puerto 30080 de la máquina vagrant, después creamos un directorio compartido entre nuestro host y dicha máquina, la ruta de nuestro host sera "C:\\Users\\usuario\\Desktop\\EntregableVS" y la de la máquina vagrant será "/home/vagrant/config". Finalmente ponemos que se utilizarán dos Gb de ram para la máquina.
+```ruby
+  config.vm.network "forwarded_port", guest: 30080, host: 8085       
+  config.vm.synced_folder "C:\\Users\\raule\\Desktop\\EntregableVS","/home/vagrant/config"    
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"                                       
+  end
+```
+
+Y en esta última parte lo que hacemos es poner unos comandos que se harán en la terminal dentro de la máquina de vagrant cuando hagamos el primer "vagrant up", primero se actualiza y se descarga docker, se le dan permisos para que no tenga que utilizarse sudo todo el rato en cada comando de docker, y se instala kubctl.
+Finalmente se instala kind y se le dan permisos de ejecución.
+```ruby
   config.vm.provision "shell", inline: <<-SHELL                                              # Comandos que se harán en consola al iniciarse.
     sudo apt-get update                                                                      # Instalación de Docker.
     sudo apt-get install -y docker.io
