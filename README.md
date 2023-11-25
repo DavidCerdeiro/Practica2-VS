@@ -23,8 +23,9 @@ nodes:
 Archivo de configuración del cluster de Kubernetes, procedemos a diseccionarlo para su explicación, primera sección:
 ```yaml
 kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
 ```
-Indicamos que estamos creando un clúster de Kubernetes mediante kind.
+Indicamos que estamos creando un clúster de Kubernetes mediante Kind y la versión de la API de esta a utilizar.
 
 Segunda sección:
 ```yaml
